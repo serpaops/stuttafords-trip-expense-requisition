@@ -1,0 +1,518 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+  <!--  Active Field  -->
+  <record id="trip_requisition.field_requisition_active" model="ir.model.fields">
+    <field name="field_description">Active</field>
+    <field name="model">x_trip_requisition</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model"/>
+    <field name="name">x_active</field>
+    <field name="ttype">boolean</field>
+    <field name="required" eval="False"/>
+    <field name="store" eval="True"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="copied" eval="True"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+  </record>
+
+  <!--  name field  -->
+  <record id="trip_requisition.field_requisition_name" model="ir.model.fields">
+    <field name="copied" eval="True"/>
+    <field name="compute">
+      <![CDATA[
+for record in self: record["x_name"] = record["x_description"]
+]]>
+    </field>
+    <field name="field_description">Name</field>
+    <field name="name">x_name</field>
+    <field name="ttype">char</field>
+    <field name="model">x_trip_requisition</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model"/>
+    <field name="required" eval="False"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="False"/>
+  </record>
+
+  <!--  description field  -->
+  <record id="trip_requisition.field_requisition_description" model="ir.model.fields">
+    <field name="copied" eval="True"/>
+    <field name="field_description">Description</field>
+    <field name="name">x_description</field>
+    <field name="ttype">char</field>
+    <field name="model">x_trip_requisition</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model"/>
+    <field name="required" eval="True"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+  </record>
+
+  <!--  status field  -->
+  <record id="trip_requisition.field_requisition_status" model="ir.model.fields">
+    <field name="copied" eval="True"/>
+    <field name="field_description">Status</field>
+    <field name="name">x_status_id</field>
+    <field name="ttype">many2one</field>
+    <field name="model">x_trip_requisition</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model"/>
+    <field name="required" eval="False"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+    <field name="relation">x_trip_requisition_status</field>
+    <field name="on_delete">set null</field>
+    <field name="depends">x_description</field>
+    <field name="compute">
+      <![CDATA[
+for record in self: record["x_status_id"] = self.env['x_trip_requisition_status'].search([('x_name', '=', 'New')])[0].id
+]]>
+    </field>
+  </record>
+
+  <!--  state field  -->
+  <record id="trip_requisition.field_requisition_state" model="ir.model.fields">
+    <field name="copied" eval="False"/>
+    <field name="field_description">State</field>
+    <field name="name">x_state</field>
+    <field name="ttype">char</field>
+    <field name="model">x_trip_requisition</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model"/>
+    <field name="required" eval="False"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="False"/>
+    <field name="state">manual</field>
+    <field name="store" eval="False"/>
+    <field name="readonly" eval="True"/>
+    <field name="related">x_status_id.display_name</field>
+    <field name="on_delete">restrict</field>
+  </record>
+
+  <!--  requisition line field  -->
+  <record id="trip_requisition.field_requisition_description_lines" model="ir.model.fields">
+    <field name="copied" eval="True"/>
+    <field name="field_description">Requisition Lines</field>
+    <field name="name">x_requisition_lines_ids</field>
+    <field name="ttype">one2many</field>
+    <field name="model">x_trip_requisition</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model"/>
+    <field name="required" eval="False"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+    <field name="relation">x_trip_requisition_line</field>
+    <field name="relation_field">x_trip_req_id</field>
+    <field name="on_delete">restrict</field>
+  </record>
+
+  <!--  requisition total amount field  -->
+  <record id="trip_requisition.field_requisition_total_amount" model="ir.model.fields">
+    <field name="depends">x_requisition_lines_ids</field>
+    <field name="copied" eval="True"/>
+    <field name="field_description">Total Amount</field>
+    <field name="name">x_total_value</field>
+    <field name="ttype">float</field>
+    <field name="compute">
+      <![CDATA[
+for record in self:
+  total = 0
+  for line in record.x_requisition_lines_ids:
+    total += line['x_rate_per_day'] * line['x_no_of_days'] * line['x_exchange_rate']
+  record["x_total_value"] = total
+]]>
+    </field>
+    <field name="model">x_trip_requisition</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model"/>
+    <field name="required" eval="False"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="False"/>
+  </record>
+
+  <!--  requested by field  -->
+  <record id="trip_requisition.field_requisition_requested_by" model="ir.model.fields">
+    <field name="copied" eval="True"/>
+    <field name="field_description">Request By</field>
+    <field name="name">x_requested_by</field>
+    <field name="ttype">many2one</field>
+    <field name="model">x_trip_requisition</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model"/>
+    <field name="required" eval="True"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+    <field name="relation">hr.employee</field>
+    <field name="on_delete">restrict</field>
+  </record>
+
+  <!--  approved by field  -->
+  <record id="trip_requisition.field_requisition_approved_by" model="ir.model.fields">
+    <field name="copied" eval="True"/>
+    <field name="field_description">Approved By</field>
+    <field name="name">x_approved_by</field>
+    <field name="ttype">many2one</field>
+    <field name="model">x_trip_requisition</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model"/>
+    <field name="required" eval="False"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+    <field name="relation">res.users</field>
+    <field name="on_delete">restrict</field>
+  </record>
+
+  <!--  company field  -->
+  <record id="trip_requisition.field_requisition_company_id" model="ir.model.fields">
+    <field name="copied" eval="True"/>
+    <field name="field_description">Company</field>
+    <field name="name">x_company_id</field>
+    <field name="ttype">many2one</field>
+    <field name="model">x_trip_requisition</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model"/>
+    <field name="required" eval="False"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+    <field name="relation">res.company</field>
+    <field name="on_delete">restrict</field>
+    <field name="depends">x_description</field>
+    <field name="compute">
+      <![CDATA[
+for record in self: record["x_company_id"] = self.env.company.id
+]]>
+    </field>
+  </record>
+
+  <!--  currency field  -->
+  <record id="trip_requisition.field_requisition_currency_id" model="ir.model.fields">
+    <field name="copied" eval="True"/>
+    <field name="field_description">Currency</field>
+    <field name="name">x_currency_id</field>
+    <field name="ttype">many2one</field>
+    <field name="model">x_trip_requisition</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model"/>
+    <field name="required" eval="False"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+    <field name="relation">res.currency</field>
+    <field name="on_delete">restrict</field>
+  </record>
+
+  <!--  notes field  -->
+  <record id="trip_requisition.field_requisition_notes" model="ir.model.fields">
+    <field name="copied" eval="True"/>
+    <field name="field_description">Notes</field>
+    <field name="name">x_notes</field>
+    <field name="ttype">char</field>
+    <field name="model">x_trip_requisition</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model"/>
+    <field name="required" eval="False"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+  </record>
+
+  <!--  requested on field  -->
+  <record id="trip_requisition.field_requisition_requested_on" model="ir.model.fields">
+    <field name="copied" eval="True"/>
+    <field name="field_description">Request On</field>
+    <field name="name">x_requested_on</field>
+    <field name="ttype">datetime</field>
+    <field name="model">x_trip_requisition</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model"/>
+    <field name="required" eval="True"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+  </record>
+
+  <!--    kanban fields      -->
+  <record id="trip_requisition.field_requisition_kanban_state" model="ir.model.fields">
+    <field name="depends">x_status_id</field>
+    <field name="field_description">Kanban State</field>
+    <field name="compute">
+      <![CDATA[
+for record in self:
+  if record.x_status_id.x_name == "New":
+    record["x_kanban_state"] = "new"
+  if record.x_status_id.x_name == "Pending Approval":
+    record["x_kanban_state"] = "pending_approval"
+  if record.x_status_id.x_name == "Approved":
+    record["x_kanban_state"] = "approved"
+  if record.x_status_id.x_name == "Collected and Posted":
+    record["x_kanban_state"] = "collectd_and_posted"
+  if record.x_status_id.x_name == "Rejected":
+    record["x_kanban_state"] = "rejected"
+]]>
+    </field>
+    <field name="name">x_kanban_state</field>
+    <field name="ttype">selection</field>
+    <field name="model">x_trip_requisition</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model"/>
+    <field name="required" eval="False"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="state">manual</field>
+    <field name="selection">[('new', 'New'), ('pending_approval', 'Pending Approval'), ('approved', 'Approved'),('collected_and_posted', 'Collected and Posted'), ('rejected', 'Rejected')]</field>
+    <field name="store" eval="False"/>
+  </record>
+
+  <!--    journal relationship-->
+  <record id="trip_requisition.field_requisition_journal" model="ir.model.fields">
+    <field name="field_description">Journals</field>
+    <field name="name">x_journal_ids</field>
+    <field name="ttype">many2one</field>
+    <field name="model">x_trip_requisition</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model"/>
+    <field name="required" eval="False"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+    <field name="copied" eval="True"/>
+    <field name="relation">account.move</field>
+    <field name="on_delete">restrict</field>
+  </record>
+
+  <!--    requisition line count-->
+  <record id="trip_requisition.field_requisition_line_count" model="ir.model.fields">
+    <field name="compute">
+      <![CDATA[
+for record in self: 
+  record['x_requisition_line_count'] = self.env['x_trip_requisition_line'].search_count([('x_trip_req_id', '=', record.id)])
+]]>    </field>
+    <field name="copied" eval="False"/>
+    <field name="field_description">Requisitions Count</field>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="model">x_trip_requisition</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model"/>
+    <field name="name">x_requisition_line_count</field>
+    <field name="on_delete" eval="False"/>
+    <field name="readonly" eval="False"/>
+    <field name="required" eval="False"/>
+    <field name="selectable" eval="False"/>
+    <field name="state">manual</field>
+    <field name="store" eval="False"/>
+    <field name="ttype">integer</field>
+  </record>
+
+  <!--    requisition journal count-->
+  <record id="trip_requisition.field_requisition_journals_count" model="ir.model.fields">
+    <field name="compute">
+      <![CDATA[
+for record in self: record['x_requisition_journals_count'] = self.env['account.move'].search_count([('x_associated_requisitions', '=', record.id)])
+]]>    </field>
+    <field name="copied" eval="False"/>
+    <field name="field_description">Requisition Journals Count</field>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="model">x_trip_requisition</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model"/>
+    <field name="name">x_requisition_journals_count</field>
+    <field name="on_delete" eval="False"/>
+    <field name="readonly" eval="False"/>
+    <field name="required" eval="False"/>
+    <field name="selectable" eval="False"/>
+    <field name="state">manual</field>
+    <field name="store" eval="False"/>
+    <field name="ttype">integer</field>
+  </record>
+
+  <record id="trip_requisition.field_requisition_fleet" model="ir.model.fields">
+    <field name="field_description">Fleet</field>
+    <field name="name">x_fleet</field>
+    <field name="ttype">many2one</field>
+    <field name="model">x_trip_requisition</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model"/>
+    <field name="required" eval="False"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+    <field name="copied" eval="True"/>
+    <field name="relation">fleet.vehicle</field>
+    <field name="on_delete">restrict</field>
+  </record>
+
+  <record id="trip_requisition.field_requisition_from" model="ir.model.fields">
+    <field name="field_description">From</field>
+    <field name="name">x_from</field>
+    <field name="ttype">many2one</field>
+    <field name="model">x_trip_requisition</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model"/>
+    <field name="required" eval="False"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+    <field name="copied" eval="True"/>
+    <field name="relation">x_city</field>
+    <field name="on_delete">restrict</field>
+  </record>
+
+  <record id="trip_requisition.field_requisition_to" model="ir.model.fields">
+    <field name="field_description">To</field>
+    <field name="name">x_to</field>
+    <field name="ttype">many2one</field>
+    <field name="model">x_trip_requisition</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model"/>
+    <field name="required" eval="False"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+    <field name="copied" eval="True"/>
+    <field name="relation">x_city</field>
+    <field name="on_delete">restrict</field>
+  </record>
+
+  <!-- sale order relation filed -->
+  <record id="trip_requisition.field_requisition_sale_orders" model="ir.model.fields">
+    <field name="field_description">Trip Expense Requisition</field>
+    <field name="name">x_trip_expense_requisition</field>
+    <field name="ttype">many2one</field>
+    <field name="model">sale.order</field>
+    <field name="model_id" ref="sale.model_sale_order"/>
+    <field name="required" eval="False"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+    <field name="copied" eval="True"/>
+    <field name="relation">x_trip_requisition</field>
+    <field name="on_delete">restrict</field>
+  </record>
+
+  <!-- sale orders for trip -->
+  <record id="trip_requisition.field_requisition_sale_orders_ids" model="ir.model.fields">
+    <field name="field_description">Sale Orders</field>
+    <field name="name">x_sale_orders_ids</field>
+    <field name="ttype">one2many</field>
+    <field name="model">x_trip_requisition</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model"/>
+    <field name="required" eval="False"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+    <field name="copied" eval="True"/>
+    <field name="relation">sale.order</field>
+    <field name="relation_field">x_trip_expense_requisition</field>
+    <field name="on_delete">restrict</field>
+  </record>
+
+  <!--    requisition consolidation lines    -->
+  <record id="trip_requisition.field_requisition_consoildation_field" model="ir.model.fields">
+    <field name="field_description">Consolidation Lines</field>
+    <field name="name">x_consolidation_lines</field>
+    <field name="ttype">one2many</field>
+    <field name="model">x_trip_requisition</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="on_delete">set null</field>
+    <field name="readonly" eval="False"/>
+    <field name="required" eval="False"/>
+    <field name="selectable" eval="False"/>
+    <field name="state">manual</field>
+    <field name="copied" eval="False"/>
+    <field name="store" eval="False"/>
+    <field name="relation">x_trip_consolidation</field>
+    <field name="relation_field">x_consolidation_id</field>
+  </record>
+
+  <!-- glens ratios -->
+  <record id="trip_requisition.field_requisition_glens_ratios" model="ir.model.fields">
+    <field name="copied" eval="True"/>
+    <field name="field_description">Glens Ratios</field>
+    <field name="name">x_glens_ratios</field>
+    <field name="ttype">float</field>
+    <field name="model">x_trip_requisition</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model"/>
+    <field name="required" eval="False"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+  </record>
+
+  <!-- stuttafords ratios -->
+  <record id="trip_requisition.field_requisition_stutt_ratios" model="ir.model.fields">
+    <field name="copied" eval="True"/>
+    <field name="field_description">Stuttafords Ratios</field>
+    <field name="name">x_stutt_ratio</field>
+    <field name="ttype">float</field>
+    <field name="model">x_trip_requisition</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model"/>
+    <field name="required" eval="False"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+  </record>
+
+  <!-- glens total -->
+  <record id="trip_requisition.field_requisition_glens_total" model="ir.model.fields">
+    <field name="copied" eval="True"/>
+    <field name="field_description">Glens Total</field>
+    <field name="name">x_glens_total</field>
+    <field name="ttype">float</field>
+    <field name="model">x_trip_requisition</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model"/>
+    <field name="required" eval="False"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+  </record>
+
+  <!-- stuttafords total -->
+  <record id="trip_requisition.field_requisition_stutt_total" model="ir.model.fields">
+    <field name="copied" eval="True"/>
+    <field name="field_description">Stuttafords Total</field>
+    <field name="name">x_stutt_total</field>
+    <field name="ttype">float</field>
+    <field name="model">x_trip_requisition</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model"/>
+    <field name="required" eval="False"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+  </record>
+
+  
+
+  <!--  companies id field  -->
+  <record id="trip_requisition.field_requisition_companies_ids" model="ir.model.fields">
+    <field name="field_description">Companies Ids</field>
+    <field name="name">x_company_ids</field>
+    <field name="ttype">many2many</field>
+    <field name="model">x_trip_requisition</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model"/>
+    <field name="state">manual</field>
+    <field name="required" eval="False"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="copied" eval="True"/>
+    <field name="store" eval="True"/>
+    <field name="relation">res.company</field>
+    <field name="compute">
+      <![CDATA[
+for record in self:
+  record['x_company_ids'] = self.env['res.company'].search([]).ids
+  
+]]>
+    </field>
+  </record>
+</odoo>

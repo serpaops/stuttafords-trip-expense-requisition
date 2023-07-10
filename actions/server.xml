@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+  <record id="approve_requisition" model="ir.actions.server">
+    <field name="binding_type">action</field>
+    <field name="child_ids" eval="[(6, 0, [])]"/>
+    <field name="code">
+      <![CDATA[
+for record in records:
+  record.write({
+    "x_status_id": env['x_trip_requisition_status'].search([('x_name', '=', 'Approved')])[0].id,
+    "x_approved_by": env.context.get("uid")
+  })
+]]>
+    </field>
+    <field name="model_id" ref="trip_requisition_model"/>
+    <field name="name">Approve Trip Expense Requisition</field>
+    <field name="sequence">1</field>
+    <field name="state">code</field>
+  </record>
+
+  <record id="ask_for_approval" model="ir.actions.server">
+    <field name="binding_type">action</field>
+    <field name="child_ids" eval="[(6, 0, [])]"/>
+    <field name="code">
+      <![CDATA[
+for record in records:
+  record.write({
+    "x_status_id": env['x_trip_requisition_status'].search([('x_name', '=', 'Pending Approval')])[0].id,
+  })
+]]>
+    </field>
+    <field name="model_id" ref="trip_requisition_model"/>
+    <field name="name">Ask Approval For Trip Expense Requisition</field>
+    <field name="sequence">1</field>
+    <field name="state">code</field>
+  </record>
+
+  <record id="disapprove_requisition" model="ir.actions.server">
+    <field name="binding_type">action</field>
+    <field name="child_ids" eval="[(6, 0, [])]"/>
+    <field name="code">
+      <![CDATA[
+for record in records:
+  record.write({
+    "x_status_id": env['x_trip_requisition_status'].search([('x_name', '=', 'Rejected')])[0].id,
+    "x_approved_by": env.context.get("uid")
+  })
+]]>
+    </field>
+    <field name="model_id" ref="trip_requisition_model"/>
+    <field name="name">Disapprove Trip Expense Requisition</field>
+    <field name="sequence">1</field>
+    <field name="state">code</field>
+  </record>
+
+  <record id="post_from_approve_requisition" model="ir.actions.server">
+    <field name="binding_type">action</field>
+    <field name="child_ids" eval="[(6, 0, [])]"/>
+    <field name="code">
+      <![CDATA[
+journals = env["account.move"].search([])
+
+for journal in journals:
+  if journal.x_from_trip_requisitions == 1 and journal.state == "draft":
+    for line in journal.line_ids:
+      pass
+    journal.action_post()
+]]>
+    </field>
+    <field name="model_id" ref="trip_requisition_model"/>
+    <field name="name">Post REQS From Trip Expense Requisition</field>
+    <field name="sequence">1</field>
+    <field name="state">code</field>
+  </record>
+
+  <record id="post_if_from_requisition" model="ir.actions.server">
+    <field name="binding_type">action</field>
+    <field name="child_ids" eval="[(6, 0, [])]"/>
+    <field name="code">
+      <![CDATA[
+for record in records:
+  if record.x_from_trip_requisitions == 1:
+    record.action_post()
+]]>
+    </field>
+    <field name="model_id" ref="account.model_account_move"/>
+    <field name="name">Post If From Requisition</field>
+    <field name="sequence">1</field>
+    <field name="state">code</field>
+  </record>
+
+  <record id="prevent_requisition_non_zero_field" model="ir.actions.server">
+    <field name="binding_type">action</field>
+    <field name="child_ids" eval="[(6, 0, [])]"/>
+    <field name="code">
+      <![CDATA[
+# for record in records:
+#   if record.x_associated_trip_requisitions and record.x_from_trip_requisitions == 1 and record.state == "posted":
+#     # raise UserError(record.x_associated_trip_requisitions.x_total_value)
+
+#     for line in record.line_ids:
+#       line.with_context(check_move_validity=False).write({
+#         "amount_currency": record.x_associated_requisition.x_total_value
+#       })
+
+# for record in records:
+#   if record.x_associated_requisition and record.x_from_trip_requisitions == 1 and record.state == "posted":
+#     env.with_context(check_move_validity=False).cr.execute("update account_move_line set amount_currency=%s where id=%s" % (record.x_associated_requisition.x_total_value, record.line_ids[0].id))
+#     env.with_context(check_move_validity=False).cr.execute("update account_move_line set amount_currency=%s where id=%s" % (-record.x_associated_requisition.x_total_value, record.line_ids[1].id))
+#     env.with_context(check_move_validity=False).cr.commit()
+]]>
+    </field>
+    <field name="model_id" ref="account.model_account_move"/>
+    <field name="name">Prevent Trip Expense Requisition Non Zero Field</field>
+    <field name="sequence">1</field>
+    <field name="state">code</field>
+  </record>
+
+  <record id="prevent_delete_of_approved" model="ir.actions.server">
+    <field name="binding_model_id" eval="False"/>
+    <field name="binding_type">action</field>
+    <field name="binding_view_types">list,form</field>
+    <field name="child_ids" eval="[(6, 0, [])]"/>
+    <field name="code"><![CDATA[
+
+for record in records:
+  if record.x_status_id.id == env['x_trip_requisition_status'].search([('x_name', '=', 'Approved')])[0].id or record.x_status_id.id == env['x_trip_requisition_status'].search([('x_name', '=', 'Collected and Posted')])[0].id:
+    raise UserError("This order is approved and cannot be deleted")
+
+    if record:
+      if record.x_status_id.id == env['x_trip_requisition_status'].search([('x_name', '=', 'Approved')])[0].id or record.x_status_id.id == env['x_trip_requisition_status'].search([('x_name', '=', 'Collected and Posted')])[0].id:
+        raise UserError("This order is approved and cannot be deleted")
+]]>    </field>
+    <field name="crud_model_id" eval="False"/>
+    <field name="help" eval="False"/>
+    <field name="link_field_id" eval="False"/>
+    <field name="model_id" ref="trip_requisition_model"/>
+    <field name="name">Prevent Delete Of Approved Trip Expense REQS</field>
+    <field name="sequence">5</field>
+    <field name="state">code</field>
+  </record>
+
+  <record id="requisition" model="ir.actions.server">
+    <field name="binding_model_id" eval="False"/>
+    <field name="binding_type">action</field>
+    <field name="binding_view_types">list,form</field>
+    <field name="child_ids" eval="[(6, 0, [])]"/>
+    <field name="code"><![CDATA[
+
+for record in records:
+  if record.x_status_id.id == env['x_trip_requisition_status'].search([('x_name', '=', 'Approved')])[0].id or record.x_status_id.id == env['x_trip_requisition_status'].search([('x_name', '=', 'Collected and Posted')])[0].id:
+    raise UserError("This order is approved and cannot be edited")
+
+if record:
+  if record.x_status_id.id == env['x_trip_requisition_status'].search([('x_name', '=', 'Approved')])[0].id or record.x_status_id.id == env['x_trip_requisition_status'].search([('x_name', '=', 'Collected and Posted')])[0].id:
+    raise UserError("This order is approved and cannot be edited")
+]]>    </field>
+    <field name="crud_model_id" eval="False"/>
+    <field name="help" eval="False"/>
+    <field name="link_field_id" eval="False"/>
+    <field name="model_id" ref="trip_requisition_model"/>
+    <field name="name">Prevent Edit Of Approved Trip Expense REQS</field>
+    <field name="sequence">5</field>
+    <field name="state">code</field>
+  </record>
+
+  <record id="save_requisition_entries" model="ir.actions.server">
+    <field name="binding_type">action</field>
+    <field name="child_ids" eval="[(6, 0, [])]"/>
+    <field name="code">
+      <![CDATA[
+
+def post_entries(record):
+  for line in record['x_requisition_lines_ids']:
+    company = record.x_company_id.id
+    credit = line.x_credit_account_id
+    debit = line.x_debit_account_id
+    journal_id = env["account.journal"].search([("type", "=", "general"), ("company_id", "=", company), ("name", "ilike", "Miscellaneous")])[0].id
+
+    if not journal_id:
+      raise UserError("Please create a journal with type Miscellaneous")
+
+    if not company:
+      raise UserError("This requisition for %s does not have a company. Redo the requisition again with the appropriate company specified. Or contact your administrator for assistance." % record.x_name)
+
+    if len(credit) < 1 or len(debit) < 1:
+      raise UserError("No Debit or Credit account specified in the accounting tab for requisition: %s" % record.x_name)
+
+    # current_id = int(max(env['account.move'].search([])))
+
+
+    records =  env["account.move"].search([])
+    # raise UserError(records.search([("company_id", "=", record.x_company_id.id)])[0])
+    records.with_context(check_move_validity=True).create({
+      "journal_id": journal_id,
+      "currency_id": record.x_currency_id.id,
+      # "company_currency_id": record.x_currency_id.id,
+      "company_id": company,
+      'x_from_trip_requisitions': 1,
+      'x_associated_trip_requisitions': record.id,
+      "line_ids": [
+        (0, 0,
+        {"account_id": debit.id, "company_id": company, "currency_id": record.x_currency_id.id, "name": record.x_name,"amount_currency": record.x_total_value}),
+        (0, 0,
+        {"account_id": credit.id, "company_id": company, "currency_id": record.x_currency_id.id, "name": record.x_name, "amount_currency": -record.x_total_value})
+      ],
+    })
+
+    record.write({
+      "x_status_id": env['x_trip_requisition_status'].search([('x_name', '=', 'Collected and Posted')])[0].id,
+    })
+
+for record in records:
+  post_entries(record)
+  env.cr.commit()
+
+# current_id = int(max(env['account.move'].search([])))
+# raise UserError(current_id)
+]]>
+    </field>
+    <field name="model_id" ref="trip_requisition_model"/>
+    <field name="name">Save Trip Expense REQ Entries</field>
+    <field name="sequence">1</field>
+    <field name="state">code</field>
+  </record>
+
+  <record id="save_and_post" model="ir.actions.server">
+    <field name="name">Save First And Post Trip Expense REQS</field>
+    <field name="state">multi</field>
+    <field name="model_id" ref="trip_requisition_model"/>
+    <field name="child_ids" eval="[(4, ref('trip_requisition.post_from_approve_requisition')), (4, ref('trip_requisition.save_requisition_entries'))]"/>
+  </record>
+
+</odoo>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="field_journal_from_trip_expense_requisition" model="ir.model.fields">
+        <field name="compute" eval="False" />
+        <field name="copied" eval="False" />
+        <field name="depends" eval="False" />
+        <field name="field_description">From Trip Expense Requisition</field>
+        <field name="groups" eval="[(6, 0, [])]" />
+        <field name="model">account.move</field>
+        <field name="model_id" ref="account.model_account_move" />
+        <field name="name">x_from_trip_requisitions</field>
+        <field name="on_delete" eval="False" />
+        <field name="selectable" eval="True" />
+        <field name="store" eval="True" />
+        <field name="state">manual</field>
+        <field name="ttype">integer</field>
+    </record>
+
+    <record id="field_journal_associated_trip_expense_requisitions" model="ir.model.fields">
+        <field name="compute" eval="False" />
+        <field name="copied" eval="True" />
+        <field name="depends" eval="False" />
+        <field name="domain">[]</field>
+        <field name="field_description">Associated Trip Expense Requisition</field>
+        <field name="groups" eval="[(6, 0, [])]" />
+        <field name="model">account.move</field>
+        <field name="model_id" ref="account.model_account_move" />
+        <field name="name">x_associated_trip_requisitions</field>
+        <field name="on_delete">set null</field>
+        <field name="relation">x_trip_requisition</field>
+        <field name="on_delete" eval="False" />
+        <field name="required" eval="False"/>
+        <field name="selectable" eval="True"/>
+        <field name="store" eval="True" />
+        <field name="state">manual</field>
+        <field name="ttype">many2one</field>
+    </record>
+
+</odoo>

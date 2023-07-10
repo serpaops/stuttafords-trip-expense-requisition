@@ -1,0 +1,56 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+    <!--
+    <record model="ir.ui.view" id="trip_requisition.list">
+      <field name="name">trip_requisition list</field>
+      <field name="model">trip_requisition.trip_requisition</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="value"/>
+          <field name="value2"/>
+        </tree>
+      </field>
+    </record>
+-->
+
+    <!-- actions opening views on models -->
+    <!--
+    <record model="ir.actions.act_window" id="trip_requisition.action_window">
+      <field name="name">trip_requisition window</field>
+      <field name="res_model">trip_requisition.trip_requisition</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+-->
+
+    <!-- server action to the one above -->
+    <!--
+    <record model="ir.actions.server" id="trip_requisition.action_server">
+      <field name="name">trip_requisition server</field>
+      <field name="model_id" ref="model_trip_requisition_trip_requisition"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+-->
+
+    <!-- Top menu item -->
+    <menuitem name="Trip Requisition" id="trip_requisition.menu_root" action="trip_requisition_action_window" sequence="1" />
+    <!-- menu categories -->
+    <!--
+-->
+    <menuitem name="Requisitions" id="trip_requisition.requisitions" parent="trip_requisition.menu_root" action="trip_requisition_action_window" sequence="1" />
+    <menuitem name="Configurations" id="trip_requisition.configurations" parent="trip_requisition.menu_root" sequence="2"/>
+    <!-- actions -->
+    <!--
+    <menuitem name="List" id="trip_requisition.menu_1_list" parent="trip_requisition.menu_1" />
+-->
+    <menuitem name="Requisition Status" id="trip_requisition" parent="trip_requisition.configurations" sequence="1" action="trip_requisition_status_action_window" />
+  </data>
+</odoo>

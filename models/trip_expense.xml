@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+  <!--  name field  -->
+  <record id="trip_requisition.field_trip_expense_description" model="ir.model.fields">
+    <field name="copied" eval="True"/>
+    <field name="field_description">Trip Expense</field>
+    <field name="name">x_description</field>
+    <field name="ttype">char</field>
+    <field name="model">x_trip_expense</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model_trip_expense_item"/>
+    <field name="required" eval="True"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+  </record>
+
+  <!--  rate per day field  -->
+  <record id="trip_requisition.field_trip_expense_description" model="ir.model.fields">
+    <field name="copied" eval="True"/>
+    <field name="field_description">Trip Rate Per Day</field>
+    <field name="name">x_rate</field>
+    <field name="ttype">float</field>
+    <field name="model">x_trip_expense</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model_trip_expense_item"/>
+    <field name="required" eval="True"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+  </record>
+
+  <!--  number of days field  -->
+  <record id="trip_requisition.field_trip_expense_description" model="ir.model.fields">
+    <field name="copied" eval="True"/>
+    <field name="field_description">Trip Number Of Days</field>
+    <field name="name">x_no_of_days</field>
+    <field name="ttype">float</field>
+    <field name="model">x_trip_expense</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model_trip_expense_item"/>
+    <field name="required" eval="True"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+  </record>
+
+  <!--  exchange rate field  -->
+  <record id="trip_requisition.field_trip_expense_description" model="ir.model.fields">
+    <field name="copied" eval="True"/>
+    <field name="field_description">Trip Exchange Rate</field>
+    <field name="name">x_exchange</field>
+    <field name="ttype">float</field>
+    <field name="model">x_trip_expense</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model_trip_expense_item"/>
+    <field name="required" eval="True"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+  </record>
+
+
+
+</odoo>

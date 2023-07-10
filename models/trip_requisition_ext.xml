@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+  <!-- fleet-->
+  <record id="trip_requisition.field_requisition_fleet" model="ir.model.fields">
+    <field name="copied" eval="True"/>
+    <field name="field_description">Fleet</field>
+    <field name="name">x_fleet</field>
+    <field name="ttype">many2one</field>
+    <field name="model">x_trip_requisition</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model"/>
+    <field name="required" eval="True"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+    <field name="relation">fleet.vehicle</field>
+  </record>
+
+  <!-- depot-->
+  <record id="trip_requisition.field_requisition_depot" model="ir.model.fields">
+    <field name="copied" eval="True"/>
+    <field name="field_description">Depot</field>
+    <field name="name">x_depot</field>
+    <field name="ttype">char</field>
+    <field name="model">x_trip_requisition</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model"/>
+    <field name="required" eval="True"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+  </record>
+
+  <!-- from-->
+  <record id="trip_requisition.field_requisition_from" model="ir.model.fields">
+    <field name="copied" eval="True"/>
+    <field name="field_description">From</field>
+    <field name="name">x_from</field>
+    <field name="ttype">many2one</field>
+    <field name="model">x_trip_requisition</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model"/>
+    <field name="required" eval="True"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+    <field name="relation">x_city</field>
+  </record>
+
+  <!-- to-->
+  <record id="trip_requisition.field_requisition_to" model="ir.model.fields">
+    <field name="copied" eval="True"/>
+    <field name="field_description">To</field>
+    <field name="name">x_to</field>
+    <field name="ttype">many2one</field>
+    <field name="model">x_trip_requisition</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model"/>
+    <field name="required" eval="True"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+    <field name="relation">x_city</field>
+  </record>
+
+  <!-- consolidation-->
+  <record id="trip_requisition.field_requisition_consolidation_field" model="ir.model.fields">
+    <field name="copied" eval="True"/>
+    <field name="field_description">Consolidation</field>
+    <field name="name">x_consolidation_ids</field>
+    <field name="ttype">one2many</field>
+    <field name="model">x_trip_requisition</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model"/>
+    <field name="required" eval="True"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+    <field name="relation">x_trip_consolidation</field>
+    <field name="relation_field">x_consolidation_id</field>
+  </record>
+
+  <!--  requisition glens ratio field  -->
+  <record id="trip_requisition.field_requisition_glens_ratio" model="ir.model.fields">
+    <field name="copied" eval="True"/>
+    <field name="field_description">Glens Portion</field>
+    <field name="name">x_glens_ratio</field>
+    <field name="ttype">float</field>
+    <field name="model">x_trip_requisition_ratio</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model"/>
+    <field name="required" eval="False"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+    <field name="compute">
+      <![CDATA[
+for record in self:
+  pass
+    
+    ]]>
+    </field>
+  </record>
+
+
+  <!--  requisition stuttafords ratio field  -->
+  <record id="trip_requisition.field_requisition_stuttafords_ratio" model="ir.model.fields">
+    <field name="copied" eval="True"/>
+    <field name="field_description">Stuttafords Portion</field>
+    <field name="name">x_stuttafords_ratio</field>
+    <field name="ttype">float</field>
+    <field name="model">x_trip_requisition</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model"/>
+    <field name="required" eval="False"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+    <field name="compute">
+      <![CDATA[
+for record in self:
+  pass
+    
+    ]]>
+    </field>
+  </record>
+
+  <!--  requisition glens portion field  -->
+  <record id="trip_requisition.field_requisition_glens_portion" model="ir.model.fields">
+    <field name="copied" eval="True"/>
+    <field name="field_description">Glens Portion</field>
+    <field name="name">x_glens</field>
+    <field name="ttype">float</field>
+    <field name="model">x_trip_requisition</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model"/>
+    <field name="required" eval="False"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+    <field name="compute">
+      <![CDATA[
+for record in self:
+  pass
+    
+    ]]>
+    </field>
+  </record>
+
+
+  <!--  requisition stuttafords portion field  -->
+  <record id="trip_requisition.field_requisition_stuttafords_portion" model="ir.model.fields">
+    <field name="copied" eval="True"/>
+    <field name="field_description">Stuttafords Portion</field>
+    <field name="name">x_stuttafords</field>
+    <field name="ttype">float</field>
+    <field name="model">x_trip_requisition</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model"/>
+    <field name="required" eval="False"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+    <field name="compute">
+      <![CDATA[
+for record in self:
+  pass
+    
+    ]]>
+    </field>
+  </record>
+
+</odoo>

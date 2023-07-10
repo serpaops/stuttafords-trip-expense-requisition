@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+  <!-- requisition id -->
+  <record id="trip_requisition.field_requisition_consolidation_id" model="ir.model.fields">
+    <field name="copied" eval="True"/>
+    <field name="field_description">Trip Requisition Id</field>
+    <field name="name">x_consolidation_id</field>
+    <field name="ttype">many2one</field>
+    <field name="model">x_trip_consolidation</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model_consolidation"/>
+    <field name="required" eval="False"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+    <field name="relation">x_trip_requisition</field>
+    <field name="on_delete">restrict</field>
+  </record>
+
+  <!-- sale order -->
+  <record id="trip_requisition.field_requisition_consolidation_sale_order" model="ir.model.fields">
+    <field name="copied" eval="True"/>
+    <field name="field_description">Sale Order</field>
+    <field name="name">x_sale_order</field>
+    <field name="ttype">many2one</field>
+    <field name="model">x_trip_consolidation</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model_consolidation"/>
+    <field name="required" eval="True"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+    <field name="relation">sale.order</field>
+  </record>
+
+  <!-- total -->
+  <record id="trip_requisition.field_requisition_consolidation_total" model="ir.model.fields">
+    <field name="copied" eval="True"/>
+    <field name="field_description">Total</field>
+    <field name="name">x_total</field>
+    <field name="ttype">float</field>
+    <field name="model">x_trip_consolidation</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model_consolidation"/>
+    <field name="required" eval="False"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+    <field name="compute">
+      <![CDATA[
+for record in self:
+  record["x_total"] = record['amount_total']
+]]>
+    </field>
+  </record>
+
+
+</odoo>

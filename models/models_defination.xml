@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+  <!-- trip requesition status model-->
+  <record id="trip_requisition_status_model" model="ir.model">
+    <field name="info">Trip Requisition Status</field>
+    <field name="is_mail_thread" eval="True" />
+    <field name="is_mail_activity" eval="True" />
+    <field name="model">x_trip_requisition_status</field>
+    <field name="name">Trip Requisition Status</field>
+    <field name="state">manual</field>
+    <field name="transient" eval="False" />
+  </record>
+
+  <!-- trip requesition model-->
+  <record id="trip_requisition_model" model="ir.model">
+    <field name="info">Trip Requisition</field>
+    <field name="is_mail_thread" eval="True" />
+    <field name="is_mail_activity" eval="True" />
+    <field name="model">x_trip_requisition</field>
+    <field name="name">Trip Requisition</field>
+    <field name="state">manual</field>
+    <field name="transient" eval="False" />
+  </record>
+
+  <!-- reqeusition line model -->
+  <record id="trip_requisition_model_line" model="ir.model">
+    <field name="info">Trip Requisition Line</field>
+    <field name="is_mail_thread" eval="True" />
+    <field name="is_mail_activity" eval="True" />
+    <field name="model">x_trip_requisition_line</field>
+    <field name="name">Trip Requisition Line</field>
+    <field name="state">manual</field>
+    <field name="transient" eval="False" />
+  </record>
+
+  <!-- consolidation line model -->
+  <record id="trip_requisition_model_consolidation" model="ir.model">
+    <field name="info">Consolidation Line</field>
+    <field name="is_mail_thread" eval="True" />
+    <field name="is_mail_activity" eval="True" />
+    <field name="model">x_trip_consolidation</field>
+    <field name="name">Consolidation Line</field>
+    <field name="state">manual</field>
+    <field name="transient" eval="False" />
+  </record>
+
+  <!-- cost apportionment of cost model -->
+  <record id="trip_requisition_model_cost_appointment" model="ir.model">
+    <field name="info">Cost Appointments</field>
+    <field name="is_mail_thread" eval="True" />
+    <field name="is_mail_activity" eval="True" />
+    <field name="model">x_trip_cost_appointment</field>
+    <field name="name">Cost Appointments</field>
+    <field name="state">manual</field>
+    <field name="transient" eval="False" />
+  </record>
+
+  <!-- trip expense item model -->
+  <record id="trip_requisition_model_trip_expense_item" model="ir.model">
+    <field name="info">Trip Expense Item</field>
+    <field name="is_mail_thread" eval="True" />
+    <field name="is_mail_activity" eval="True" />
+    <field name="model">x_trip_expense</field>
+    <field name="name">Trip Expense</field>
+    <field name="state">manual</field>
+    <field name="transient" eval="False" />
+  </record>
+
+</odoo>

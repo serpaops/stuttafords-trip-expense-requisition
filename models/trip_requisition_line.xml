@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+  <!--  requisition id field  -->
+  <record id="trip_requisition.field_requisition_id" model="ir.model.fields">
+    <field name="copied" eval="True"/>
+    <field name="field_description">Requisition</field>
+    <field name="name">x_trip_req_id</field>
+    <field name="ttype">many2one</field>
+    <field name="model">x_trip_requisition_line</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model_line"/>
+    <field name="required" eval="False"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+    <field name="relation">x_trip_requisition</field>
+    <field name="on_delete">set null</field>
+  </record>
+
+
+  <!--  description field  -->
+  <record id="trip_requisition.field_requisition_line_details" model="ir.model.fields">
+    <field name="copied" eval="True"/>
+    <field name="field_description">Details</field>
+    <field name="name">x_details</field>
+    <field name="ttype">selection</field>
+    <field name="model">x_trip_requisition_line</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model_line"/>
+    <field name="required" eval="True"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+    <field name="selection">[
+      ('Night Allowance: Driver', 'Night Allowance: Driver'),
+      ('Night Allowance: Loader', 'Night Allowance: Loader'),
+      ('Night Allowance: Crew', 'Night Allowance: Crew'),
+      ('Parking: Horse', 'Parking: Horse'),
+      ('Parking: Rigid', 'Parking: Rigid'),
+      ('Parking: Small Vehicle', 'Parking: Small Vehicle'),
+      ('Phone', 'Phone'),
+      ('Other', 'Other'),
+    ]</field>
+  </record>
+
+  <!--  rate per day field  -->
+  <record id="trip_requisition.field_requisition_line_rate_per_day" model="ir.model.fields">
+    <field name="copied" eval="True"/>
+    <field name="field_description">Rate Per Day</field>
+    <field name="name">x_rate_per_day</field>
+    <field name="ttype">float</field>
+    <field name="model">x_trip_requisition_line</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model_line"/>
+    <field name="required" eval="True"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+  </record>
+
+  <!--  number of days price field  -->
+  <record id="trip_requisition.field_requisition_line_number_of_days" model="ir.model.fields">
+    <field name="copied" eval="True"/>
+    <field name="field_description">Number Of Days</field>
+    <field name="name">x_no_of_days</field>
+    <field name="ttype">float</field>
+    <field name="model">x_trip_requisition_line</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model_line"/>
+    <field name="required" eval="True"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+  </record>
+
+  <!--  exchange rate field  -->
+  <record id="trip_requisition.field_requisition_line_exchange_rate" model="ir.model.fields">
+    <field name="copied" eval="True"/>
+    <field name="field_description">Exchage Rate</field>
+    <field name="name">x_exchange_rate</field>
+    <field name="ttype">float</field>
+    <field name="model">x_trip_requisition_line</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model_line"/>
+    <field name="required" eval="True"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+  </record>
+
+  <!--  debit account field  -->
+  <record id="trip_requisition.field_requisition_line_debit_account_id" model="ir.model.fields">
+    <field name="copied" eval="True"/>
+    <field name="field_description">Debit Account</field>
+    <field name="name">x_debit_account_id</field>
+    <field name="ttype">many2one</field>
+    <field name="model">x_trip_requisition_line</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model_line"/>
+    <field name="required" eval="False"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+    <field name="relation">account.account</field>
+    <field name="on_delete">restrict</field>
+  </record>
+
+  <!--  credit account field  -->
+  <record id="trip_requisition.field_requisition_line_credit_account_id" model="ir.model.fields">
+    <field name="copied" eval="True"/>
+    <field name="field_description">Credit Account</field>
+    <field name="name">x_credit_account_id</field>
+    <field name="ttype">many2one</field>
+    <field name="model">x_trip_requisition_line</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model_line"/>
+    <field name="required" eval="False"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+    <field name="relation">account.account</field>
+    <field name="on_delete">restrict</field>
+  </record>
+
+  <!--  total price field [computed field] -->
+  <record id="trip_requisition.field_requisition_line_total_price" model="ir.model.fields">
+    <field name="copied" eval="True"/>
+    <field name="depends">x_rate_per_day,x_no_of_days,x_exchange_rate</field>
+    <field name="field_description">Total Price</field>
+    <field name="name">x_total_price</field>
+    <field name="ttype">float</field>
+    <field name="compute">
+      <![CDATA[
+for record in self:
+  record["x_total_price"] = record['x_rate_per_day'] * record['x_no_of_days'] * record['x_exchange_rate']
+]]>
+    </field>
+    <field name="model">x_trip_requisition_line</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model_line"/>
+    <field name="required" eval="False"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+  </record>
+
+</odoo>

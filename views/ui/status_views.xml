@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+
+  <record model="ir.actions.act_window" id="trip_requisition_status_action_window">
+    <field name="name">Trip Requisition</field>
+    <field name="res_model">x_trip_requisition_status</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+  <record model="ir.ui.view" id="trip_requisition.requisition_list_view">
+    <field name="name">Trip Requisition Status List</field>
+    <field name="model">x_trip_requisition_status</field>
+    <field name="type">tree</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="x_name"/>
+        <field name="x_sequence"/>
+      </tree>
+    </field>
+  </record>
+
+  <record model="ir.ui.view" id="trip_requisition.requisition_form_view">
+    <field name="name">New Trip Requisition Status</field>
+    <field name="model">x_trip_requisition_status</field>
+    <field name="type">form</field>
+    <field name="arch" type="xml">
+      <form>
+        <header>
+          <h1>New Requisition Status</h1>
+        </header>
+        <sheet>
+          <group>
+            <field name="x_name" required="1" placeholder="New requisition status."/>
+            <field name="x_sequence" placeholder="Requisition sequence."/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+
+
+
+</odoo>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+  <record id="trip_requisition_access_user" model="ir.model.access">
+    <field name="active" eval="True"/>
+    <field name="group_id" ref="base.group_user"/>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model_line"/>
+    <field name="name">Custom Trip Requisition Access</field>
+    <field name="perm_create" eval="True"/>
+    <field name="perm_read" eval="True"/>
+    <field name="perm_unlink" eval="True"/>
+    <field name="perm_write" eval="True"/>
+  </record>
+
+  <record id="trip_requisition_status_access_user" model="ir.model.access">
+    <field name="active" eval="True"/>
+    <field name="group_id" ref="base.group_user"/>
+    <field name="model_id" ref="trip_requisition.trip_requisition_status_model"/>
+    <field name="name">Custom Trip Requisition Status Access</field>
+    <field name="perm_create" eval="True"/>
+    <field name="perm_read" eval="True"/>
+    <field name="perm_unlink" eval="True"/>
+    <field name="perm_write" eval="True"/>
+  </record>
+
+  <record id="trip_requisition_line_access_user" model="ir.model.access">
+    <field name="active" eval="True"/>
+    <field name="group_id" ref="base.group_user"/>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model_line"/>
+    <field name="name">Custom Trip Requisition Line Access</field>
+    <field name="perm_create" eval="True"/>
+    <field name="perm_read" eval="True"/>
+    <field name="perm_unlink" eval="True"/>
+    <field name="perm_write" eval="True"/>
+  </record>
+
+  <record id="trip_requisition_consolidation_access_user" model="ir.model.access">
+    <field name="active" eval="True"/>
+    <field name="group_id" ref="base.group_user"/>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model_consolidation"/>
+    <field name="name">Custom Consolidation Line Access</field>
+    <field name="perm_create" eval="True"/>
+    <field name="perm_read" eval="True"/>
+    <field name="perm_unlink" eval="True"/>
+    <field name="perm_write" eval="True"/>
+  </record>
+
+  <record id="trip_requisition_cost_access_user" model="ir.model.access">
+    <field name="active" eval="True"/>
+    <field name="group_id" ref="base.group_user"/>
+    <field name="model_id" ref="trip_requisition.trip_requisition_model_cost_appointment"/>
+    <field name="name">Custom Cost Appointments Access</field>
+    <field name="perm_create" eval="True"/>
+    <field name="perm_read" eval="True"/>
+    <field name="perm_unlink" eval="True"/>
+    <field name="perm_write" eval="True"/>
+  </record>
+
+
+  <record id="trip_requisition_city_access_user" model="ir.model.access">
+    <field name="active" eval="True"/>
+    <field name="group_id" ref="base.group_user"/>
+    <field name="model_id" ref="invoice.city"/>
+    <field name="name">Custom City Access</field>
+    <field name="perm_create" eval="True"/>
+    <field name="perm_read" eval="True"/>
+    <field name="perm_unlink" eval="True"/>
+    <field name="perm_write" eval="True"/>
+  </record>
+
+
+</odoo>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+  <!--  name field  -->
+  <record id="trip_requisition.field_requisition_status_name" model="ir.model.fields">
+    <field name="copied" eval="True"/>
+    <field name="field_description">Name</field>
+    <field name="name">x_name</field>
+    <field name="ttype">char</field>
+    <field name="model">x_trip_requisition_status</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_status_model"/>
+    <field name="required" eval="True"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+  </record>
+
+  <!--  sequence field  -->
+  <record id="trip_requisition.field_requisition_status_sequence" model="ir.model.fields">
+    <field name="copied" eval="True"/>
+    <field name="field_description">Sequences</field>
+    <field name="name">x_sequence</field>
+    <field name="ttype">char</field>
+    <field name="model">x_trip_requisition_status</field>
+    <field name="model_id" ref="trip_requisition.trip_requisition_status_model"/>
+    <field name="required" eval="True"/>
+    <field name="groups" eval="[(6, 0, [])]"/>
+    <field name="selectable" eval="True"/>
+    <field name="state">manual</field>
+    <field name="store" eval="True"/>
+  </record>
+
+</odoo>

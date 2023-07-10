@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+  <record model="ir.actions.act_window" id="trip_requisition.trip_requisition_action_window">
+    <field name="name">Trip Requisition</field>
+    <field name="res_model">x_trip_requisition</field>
+    <field name="view_mode">kanban,tree,form</field>
+    <field name="target">current</field>
+    <field name="help">
+      <![CDATA[
+<p class="o_view_nocontent_smiling_face">
+Welcome to the Trip requisitions
+</p>
+<p>
+You currently is no trip requisitions simply click create to
+create your first trip requisitions
+</p>
+]]>    </field>
+    <field name="context">{
+                'default_x_active': True,
+                'default_x_requested_by': uid,
+                'default_x_requested_on': datetime.datetime.now(),
+                }
+    </field>
+  </record>
+
+  <!--       Requisitions Kanban view -->
+  <record id="view_requisition_kanban" model="ir.ui.view">
+    <field name="name">Trip Requisition Kanban</field>
+    <field name="model">x_trip_requisition</field>
+    <field name="type">kanban</field>
+    <field name="arch" type="xml">
+      <kanban string="Requisitions" default_group_by="x_status_id">
+        <field name="x_description"/>
+        <field name="x_status_id"/>
+        <field name="x_requested_by"/>
+        <field name="x_approved_by"/>
+        <field name="x_company_id"/>
+        <field name="x_currency_id"/>
+        <field name="x_total_value"/>
+        <templates>
+          <t t-name="kanban-box">
+            <div t-attf-class="oe_kanban_card oe_kanban_global_click">
+              <div class="o_kanban_card_content">
+                <h2>
+                  <field name="x_description" bold="True"/>
+                </h2>
+                <group>
+                  <div>Requested By
+                    <h4>
+                      <field name="x_requested_by" display="full" widget="many2one_avatar"/>
+                    </h4>
+                  </div>
+                  <div>
+                    <h5>
+                      <field name="x_currency_id" bold="True"/>
+                      <spam></spam>
+                      <field name="x_total_value" bold="True"/>
+                    </h5>
+                  </div>
+                </group>
+              </div>
+            </div>
+          </t>
+        </templates>
+      </kanban>
+    </field>
+  </record>
+
+  <record model="ir.ui.view" id="trip_requisition.trip_requisition_list_view">
+    <field name="name">Trip Requisition List</field>
+    <field name="model">x_trip_requisition</field>
+    <field name="type">tree</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="x_description"/>
+        <!-- <field name="value"/> -->
+        <!-- <field name="value2"/> -->
+      </tree>
+    </field>
+  </record>
+
+  <record model="ir.ui.view" id="trip_requisition.trip_requisition_form_view">
+    <field name="name">New Trip Requisition</field>
+    <field name="model">x_trip_requisition</field>
+    <field name="type">form</field>
+    <field name="arch" type="xml">
+      <form>
+        <header>
+          <button name="trip_requisition.ask_for_approval" type="action" data-hotkey="shift+c" string="Ask For Approval" class="oe_highlight" attrs="{'invisible': ['|', '|', '|', ('x_state', '=', 'Pending Approval'), ('x_state', '=', 'Approved'), ('x_state', '=', 'Rejected'), ('x_state', '=', 'Collected and Posted')]}" groups=""/>
+          <button name="trip_requisition.ask_for_approval" type="action" data-hotkey="shift+c" string="Ask For Approval Again" attrs="{'invisible': [('x_state', '!=', 'Rejected')]}" groups=""/>
+          <button name="trip_requisition.approve_requisition" type="action" data-hotkey="shift+c" string="Approve Requisition" class="oe_highlight" attrs="{'invisible': [('x_state', '!=', 'Pending Approval')]}" groups="base.group_erp_manager"/>
+          <button name="trip_requisition.disapprove_requisition" type="action" string="Disapprove Requisition" class="oe_highlight" attrs="{'invisible': [('x_state', '!=', 'Pending Approval')]}" groups="base.group_erp_manager"/>
+          <button name="trip_requisition.save_and_post" type="action" data-hotkey="shift+p" string="Post Entries" attrs="{'invisible': [('x_state', '!=', 'Approved')]}" groups="base.group_erp_manager"/>
+
+          <field name="x_state" readonly="1" attrs="{'invisible': True}"/>
+        </header>
+        <sheet string="requisitions">
+          <div name="button_box" class="oe_button_box">
+            <button class="oe_stat_button" icon="fa-file-o">
+              <!--                            <button class="oe_stat_button" icon="fa-file-o" type="action" name="account.action_move_journal_line">-->
+              <field widget="statinfo" name="x_requisition_journals_count" string="Journal Entry"/>
+            </button>
+          </div>
+          <div class="oe_title">
+            <h1>
+              <field name="x_description" required="1" placeholder="Description..."/>
+            </h1>
+          </div>
+          <group>
+            <group>
+              <field name="x_requested_by" required="1" widget="many2one_avatar_user"/>
+              <field name="x_status_id"/>
+              <field name="x_requested_on"/>
+            </group>
+            <group>
+              <field name="x_company_id"/>
+              <field name="x_currency_id"/>
+            </group>
+          </group>
+          <group>
+            <field name="x_fleet" />
+            <field name="x_depot" />
+          </group>
+          <group>
+            <group>
+              <field name="x_from" />
+            </group>
+            <group>
+              <field name="x_to" />
+            </group>
+          </group>
+          <group>
+            <field name="x_sale_orders_ids" widget="many2many_tags" />
+          </group>
+          <group>
+            <field name="x_requisition_lines_ids">
+              <tree editable="bottom">
+                <field name="x_details"/>
+                <field name="x_rate_per_day" optional="show"/>
+                <field name="x_no_of_days" optional="show"/>
+                <field name="x_exchange_rate" optional="show"/>
+                <field name="x_total_price" optional="show" readonly="1"/>
+                <field name="x_debit_account_id" groups="account.group_account_user"/>
+                <field name="x_credit_account_id" groups="account.group_account_user"/>
+              </tree>
+            </field>
+          </group>
+          <group>
+            <field name="x_total_value" readonly="1"/>
+          </group>
+          <h2>Consolidation</h2>
+          <p>Transport Revenue Analysis</p>
+          <group>
+            <field name="x_sale_orders_ids">
+              <tree create="0" update="0" delete="0">
+                <field name="partner_id" />
+                <field name="name" />
+                <field name="company_id" />
+                <field name="amount_total" />
+              </tree>
+            </field>
+          </group>
+          <group>
+            <group>
+              <field name="x_glens_ratios" />
+            </group>
+            <group>
+              <field name="x_stutt_ratio" />
+            </group>
+          </group>
+          <h2>Apportionment of Costs</h2>
+          <group>
+            <group>
+              <field name="x_glens_total" />
+            </group>
+            <group>
+              <field name="x_stutt_total" />
+            </group>
+          </group>
+          <group>
+            <field name="x_approved_by"/>
+          </group>
+          <group>
+            <!-- <field name="x_notes" placeholder="Type down your notes here..."/> -->
+          </group>
+        </sheet>
+        <div class="oe_chatter" name="oe_chatter">
+          <field name="message_follower_ids"/>
+          <field name="message_ids"/>
+          <field name="activity_ids"/>
+        </div>
+
+      </form>
+    </field>
+  </record>
+
+
+
+
+</odoo>
