@@ -39,6 +39,7 @@
       ('Parking: Horse', 'Parking: Horse'),
       ('Parking: Rigid', 'Parking: Rigid'),
       ('Parking: Small Vehicle', 'Parking: Small Vehicle'),
+      ('Fuel', 'Other'),
       ('Phone', 'Phone'),
       ('Other', 'Other'),
     ]</field>

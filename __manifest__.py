@@ -12,7 +12,6 @@
 
     'author': "My Company",
     'website': "https://www.yourcompany.com",
-    'auto_install': True,
     "installable": True,
     "application": True,
 
